@@ -14,7 +14,7 @@ public class Main {
 	private static final String URL = "jdbc:mysql://localhost:3306/jdbc_article_manager?useUnicode=true&characterEncoding=utf8&autoReconnect=true&serverTimezone=Asia/Seoul&useOldAliasMetadataBehavior=true&zeroDateTimeNehavior=convertToNull";
 	private static final String USER = "root";
 	private static final String PASSWORD = "";
-	
+
 	public static void main(String[] args) {
 
 		Scanner sc = new Scanner(System.in);
@@ -37,10 +37,11 @@ public class Main {
 				System.out.println("== 게시물 작성 ==");
 
 				System.out.printf("제목 : ");
-				String title = sc.nextLine().trim();;
+				String title = sc.nextLine().trim();
+				;
 				System.out.printf("내용 : ");
 				String body = sc.nextLine().trim();
-				
+
 				Connection connection = null;
 				PreparedStatement pstmt = null;
 
@@ -50,8 +51,8 @@ public class Main {
 					String sql = "INSERT INTO article";
 					sql += " SET regDate = NOW()";
 					sql += ", updateDate = NOW()";
-					sql += ", title = '"+ title +"'";
-					sql += ", `body` = '"+ body +"';";
+					sql += ", title = '" + title + "'";
+					sql += ", `body` = '" + body + "';";
 
 					pstmt = connection.prepareStatement(sql);
 					pstmt.executeUpdate();
@@ -75,7 +76,7 @@ public class Main {
 					}
 				}
 
-				articles.add(new Article(lastArticleNum, title, body));
+//				articles.add(new Article(lastArticleNum, title, body));
 
 				System.out.printf("%d번 게시물이 작성되었습니다\n", lastArticleNum);
 				lastArticleNum++;
