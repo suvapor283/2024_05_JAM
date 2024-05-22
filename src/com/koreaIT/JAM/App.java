@@ -124,8 +124,6 @@ public class App {
 					}
 				}
 			}
-			sc.close();
-
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (Exception e) {
@@ -153,6 +151,8 @@ public class App {
 				}
 			}
 		}
+		sc.close();
+
 		System.out.println("== 프로그램 끝 ==");
 	}
 }
