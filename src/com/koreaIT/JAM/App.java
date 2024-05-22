@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Scanner;
 
 import com.koreaIT.JAM.dto.Article;
+import com.koreaIT.JAM.util.DBUtil;
+import com.koreaIT.JAM.util.SecSql;
 
 public class App {
 	private final String URL = "jdbc:mysql://localhost:3306/jdbc_article_manager?useUnicode=true&characterEncoding=utf8&autoReconnect=true&serverTimezone=Asia/Seoul&useOldAliasMetadataBehavior=true&zeroDateTimeNehavior=convertToNull";
@@ -41,30 +43,19 @@ public class App {
 
 					System.out.printf("제목 : ");
 					String title = sc.nextLine().trim();
-
 					System.out.printf("내용 : ");
 					String body = sc.nextLine().trim();
 
-					String sql = "INSERT INTO article";
-					sql += " SET regDate = NOW()";
-					sql += ", updateDate = NOW()";
-					sql += ", title = '" + title + "'";
-					sql += ", `body` = '" + body + "';";
+					SecSql sql = new SecSql();
+					sql.append("INSERT INTO article");
+					sql.append("SET regDate = NOW()");
+					sql.append(", updateDate = NOW()");
+					sql.append(", title = ?", title);
+					sql.append(", `body` = ?;", body);
 
-					pstmt = connection.prepareStatement(sql);
-					pstmt.executeUpdate();
+					int id = DBUtil.insert(connection, sql);
 
-					String foundIdSql = "SELECT * FROM article";
-					foundIdSql += " ORDER BY id DESC";
-					foundIdSql += " LIMIT 1;";
-
-					pstmt = connection.prepareStatement(foundIdSql);
-					rs = pstmt.executeQuery();
-
-					while (rs.next()) {
-						int lastId = rs.getInt("id");
-						System.out.printf("%d번 게시물이 작성되었습니다\n", lastId);
-					}
+					System.out.printf("%d번 게시물이 작성되었습니다\n", id);
 				}
 
 				else if (cmd.startsWith("article modify ")) {
