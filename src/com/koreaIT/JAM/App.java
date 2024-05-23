@@ -56,24 +56,89 @@ public class App {
 				}
 
 				else if (cmd.startsWith("article modify ")) {
-					System.out.println("== 게시물 수정 ==");
+					//
 
-					int id = Integer.parseInt(cmd.split(" ")[2]);
+					try {
+						int id = Integer.parseInt(cmd.split(" ")[2]);
 
-					System.out.printf("수정할 제목 : ");
-					String title = sc.nextLine().trim();
+						System.out.println("== 게시물 수정 ==");
 
-					System.out.printf("수정할 내용 : ");
-					String body = sc.nextLine().trim();
+						System.out.printf("수정할 제목 : ");
+						String title = sc.nextLine().trim();
+						System.out.printf("수정할 내용 : ");
+						String body = sc.nextLine().trim();
 
-					SecSql sql = new SecSql();
-					sql.append("UPDATE article SET");
-					sql.append("updateDate = NOW()");
-					sql.append(", title = ?", title);
-					sql.append(", `body` = ?", body);
-					sql.append("WHERE id = ?;", id);
+						SecSql sql = new SecSql();
+						sql.append("UPDATE article SET");
+						sql.append("updateDate = NOW()");
+						sql.append(", title = ?", title);
+						sql.append(", `body` = ?", body);
+						sql.append("WHERE id = ?;", id);
 
-					System.out.printf("%d번 게시물이 수정되었습니다.%n", id);
+						DBUtil.update(connection, sql);
+						System.out.printf("%d번 게시물이 수정되었습니다.%n", id);
+
+					} catch (NumberFormatException e) {
+						System.out.println("명령어를 다시 입력해주세요.");
+						continue;
+					}
+				}
+
+				else if (cmd.startsWith("article delete ")) {
+					//
+					try {
+						int id = Integer.parseInt(cmd.split(" ")[2]);
+
+						System.out.println("== 게시물 삭제 ==");
+
+						SecSql sql = new SecSql();
+						sql.append("DELETE FROM article");
+						sql.append("WHERE id = ?;", id);
+
+						DBUtil.delete(connection, sql);
+						System.out.printf("%d번 게시물이 삭제되었습니다.%n", id);
+
+					} catch (NumberFormatException e) {
+						System.out.println("명령어를 다시 입력해주세요.");
+						continue;
+					}
+				}
+
+				else if (cmd.startsWith("article detail ")) {
+					//
+					try {
+						int id = Integer.parseInt(cmd.split(" ")[2]);
+
+						System.out.println("== 게시물 조회 ==");
+
+						List<Article> articles = new ArrayList<>();
+
+						SecSql sql = new SecSql();
+						sql.append("SELECT * FROM article");
+						sql.append("ORDER BY id DESC;");
+
+						List<Map<String, Object>> articleListMap = DBUtil.selectRows(connection, sql);
+
+						for (Map<String, Object> articleMap : articleListMap) {
+							articles.add(new Article(articleMap));
+						}
+
+						if (articles.isEmpty()) {
+							System.out.println("게시물이 존재하지 않습니다");
+							continue;
+						}
+
+						for (Article article : articles) {
+							if (article.id == id) {
+								System.out.println("	번호	|	     작성일		|     제목	|	내용");
+								System.out.printf("	%d	|	%s	|     %s 	|	%s%n", article.id, article.regDate,
+										article.title, article.body);
+							}
+						}
+					} catch (NumberFormatException e) {
+						System.out.println("명령어를 다시 입력해주세요.");
+						continue;
+					}
 				}
 
 				else if (cmd.equals("article list")) {
@@ -101,6 +166,10 @@ public class App {
 					for (Article article : articles) {
 						System.out.printf("	%d	|	%s	  |	%s\n", article.id, article.title, article.regDate);
 					}
+				}
+
+				else {
+					System.out.println("존재하지 않는 명령어입니다.");
 				}
 			}
 
