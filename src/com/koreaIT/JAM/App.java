@@ -2,11 +2,10 @@ package com.koreaIT.JAM;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 import com.koreaIT.JAM.dto.Article;
@@ -24,8 +23,6 @@ public class App {
 		Scanner sc = new Scanner(System.in);
 
 		Connection connection = null;
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
 
 		try {
 			connection = DriverManager.getConnection(URL, USER, PASSWORD);
@@ -69,38 +66,28 @@ public class App {
 					System.out.printf("수정할 내용 : ");
 					String body = sc.nextLine().trim();
 
-					String sql = "UPDATE article SET";
-					sql += " updateDate = NOW()";
-					sql += ", title = '" + title + "'";
-					sql += ", `body` = '" + body + "'";
-					sql += " WHERE id = " + id + ";";
-
-					pstmt = connection.prepareStatement(sql);
-					pstmt.executeUpdate();
+					SecSql sql = new SecSql();
+					sql.append("UPDATE article SET");
+					sql.append("updateDate = NOW()");
+					sql.append(", title = ?", title);
+					sql.append(", `body` = ?", body);
+					sql.append("WHERE id = ?;", id);
 
 					System.out.printf("%d번 게시물이 수정되었습니다.%n", id);
 				}
 
 				else if (cmd.equals("article list")) {
-					System.out.println("== 게시물 목록 ==");
 
 					List<Article> articles = new ArrayList<>();
 
-					String sql = "SELECT * FROM article";
-					sql += " ORDER BY id DESC;";
+					SecSql sql = new SecSql();
+					sql.append("SELECT * FROM article");
+					sql.append("ORDER BY id DESC;");
 
-					pstmt = connection.prepareStatement(sql);
-					rs = pstmt.executeQuery();
+					List<Map<String, Object>> articleListMap = DBUtil.selectRows(connection, sql);
 
-					while (rs.next()) {
-						int id = rs.getInt("id");
-						String regDate = rs.getString("regDate");
-						String updateDate = rs.getString("updateDate");
-						String title = rs.getString("title");
-						String body = rs.getString("body");
-
-						Article article = new Article(id, regDate, updateDate, title, body);
-						articles.add(article);
+					for (Map<String, Object> articleMap : articleListMap) {
+						articles.add(new Article(articleMap));
 					}
 
 					if (articles.isEmpty()) {
@@ -108,32 +95,20 @@ public class App {
 						continue;
 					}
 
-					System.out.println("번호	|	제목");
+					System.out.println("== 게시물 목록 ==");
+					System.out.println("	번호	|	제목	  |	    작성일	");
 
 					for (Article article : articles) {
-						System.out.printf("%d	|	%s\n", article.id, article.title);
+						System.out.printf("	%d	|	%s	  |	%s\n", article.id, article.title, article.regDate);
 					}
 				}
 			}
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (rs != null) {
-				try {
-					rs.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
-			if (pstmt != null) {
-				try {
-					pstmt.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
 			if (connection != null) {
 				try {
 					connection.close();
@@ -142,8 +117,8 @@ public class App {
 				}
 			}
 		}
-		sc.close();
 
+		sc.close();
 		System.out.println("== 프로그램 끝 ==");
 	}
 }
