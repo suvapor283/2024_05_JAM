@@ -34,7 +34,6 @@ public class SecSql {
 		for (int i = 1; i < args.length; i++) {
 			datas.add(args[i]);
 		}
-
 		return this;
 	}
 
@@ -57,7 +56,6 @@ public class SecSql {
 				stmt.setString(parameterIndex, (String) data);
 			}
 		}
-
 		return stmt;
 	}
 

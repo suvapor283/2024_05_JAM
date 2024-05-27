@@ -30,5 +30,4 @@ public class MemberService {
 		}
 		return new Member(memberMap);
 	}
-
 }

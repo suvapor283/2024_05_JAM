@@ -20,7 +20,6 @@ public class DBUtil {
 		if (rows.size() == 0) {
 			return new HashMap<>();
 		}
-
 		return rows.get(0);
 	}
 
@@ -76,7 +75,6 @@ public class DBUtil {
 				}
 			}
 		}
-
 		return rows;
 	}
 
@@ -86,7 +84,6 @@ public class DBUtil {
 		for (String key : row.keySet()) {
 			return (int) row.get(key);
 		}
-
 		return -1;
 	}
 
@@ -96,7 +93,6 @@ public class DBUtil {
 		for (String key : row.keySet()) {
 			return (String) row.get(key);
 		}
-
 		return "";
 	}
 
@@ -106,7 +102,6 @@ public class DBUtil {
 		for (String key : row.keySet()) {
 			return ((int) row.get(key)) == 1;
 		}
-
 		return false;
 	}
 
@@ -145,7 +140,6 @@ public class DBUtil {
 			}
 
 		}
-
 		return id;
 	}
 
@@ -168,7 +162,6 @@ public class DBUtil {
 				}
 			}
 		}
-
 		return affectedRows;
 	}
 

@@ -9,7 +9,6 @@ import com.koreaIT.JAM.controller.ArticleController;
 import com.koreaIT.JAM.controller.MemberController;
 
 public class App {
-
 	private final String URL = "jdbc:mysql://localhost:3306/jdbc_article_manager?useUnicode=true&characterEncoding=utf8&autoReconnect=true&serverTimezone=Asia/Seoul&useOldAliasMetadataBehavior=true&zeroDateTimeNehavior=convertToNull";
 	private final String USER = "root";
 	private final String PASSWORD = "";
@@ -44,19 +43,37 @@ public class App {
 
 				if (cmd.equals("member join")) {
 					memberController.doJoin();
-				} else if (cmd.equals("member login")) {
+				}
+
+				else if (cmd.equals("member login")) {
 					memberController.doLogin();
-				} else if (cmd.equals("article write")) {
+				}
+
+				else if (cmd.equals("member logout")) {
+					memberController.doLogout();
+				}
+
+				else if (cmd.equals("article write")) {
 					articleController.doWrite();
-				} else if (cmd.equals("article list")) {
-					articleController.showList();
-				} else if (cmd.startsWith("article detail ")) {
-					articleController.showDetail(cmd);
-				} else if (cmd.startsWith("article modify ")) {
+				}
+
+				else if (cmd.startsWith("article modify ")) {
 					articleController.doModify(cmd);
-				} else if (cmd.startsWith("article delete ")) {
+				}
+
+				else if (cmd.startsWith("article delete ")) {
 					articleController.doDelete(cmd);
-				} else {
+				}
+
+				else if (cmd.startsWith("article detail ")) {
+					articleController.showDetail(cmd);
+				}
+
+				else if (cmd.equals("article list")) {
+					articleController.showList();
+				}
+
+				else {
 					System.out.println("존재하지 않는 명령어 입니다");
 				}
 			}
@@ -73,8 +90,8 @@ public class App {
 				}
 			}
 		}
-		sc.close();
 
+		sc.close();
 		System.out.println("== 프로그램 끝 ==");
 	}
 }
