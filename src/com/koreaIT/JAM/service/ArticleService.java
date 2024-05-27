@@ -9,7 +9,6 @@ import com.koreaIT.JAM.dao.ArticleDao;
 import com.koreaIT.JAM.dto.Article;
 
 public class ArticleService {
-
 	private ArticleDao articleDao;
 
 	public ArticleService(Connection connection) {
@@ -71,5 +70,10 @@ public class ArticleService {
 			return null;
 		}
 		return new Article(articleMap);
+	}
+
+	public int increaseVCnt(int id) {
+
+		return articleDao.increaseVCnt(id);
 	}
 }
