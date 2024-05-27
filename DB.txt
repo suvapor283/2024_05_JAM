@@ -10,10 +10,30 @@ CREATE TABLE article(
     , `body` TEXT NOT NULL
 );
 
+ALTER TABLE article ADD COLUMN memberId INT UNSIGNED NOT NULL AFTER updateDate;
+
+CREATE TABLE `member`(
+    id INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT
+    , regDate DATETIME NOT NULL
+    , updateDate DATETIME NOT NULL
+    , loginId VARCHAR(20) NOT NULL UNIQUE
+    , loginPw VARCHAR(20) NOT NULL
+    , `name` VARCHAR(20) NOT NULL
+);
+
 INSERT INTO article
     SET regDate = NOW()
         , updateDate = NOW()
+        , memberId = 1
         , title = CONCAT('제목_', RAND())
         , `body` = CONCAT('내용_', RAND());
         
+INSERT INTO `member`
+    SET regDate = NOW()
+        , updateDate = NOW()
+        , loginId = 'user1'
+        , loginPw = '1234'
+        , `name` = '유저1';
+        
 SELECT * FROM article;
+SELECT * FROM `member`;cle;
