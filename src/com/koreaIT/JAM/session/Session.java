@@ -2,7 +2,7 @@ package com.koreaIT.JAM.session;
 
 public class Session {
 	private static int loginedMemberId;
-
+	
 	static {
 		loginedMemberId = -1;
 	}

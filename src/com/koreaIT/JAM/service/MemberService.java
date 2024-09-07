@@ -9,7 +9,7 @@ import com.koreaIT.JAM.dto.Member;
 public class MemberService {
 
 	private MemberDao memberDao;
-
+	
 	public MemberService(Connection connection) {
 		this.memberDao = new MemberDao(connection);
 	}
@@ -24,10 +24,11 @@ public class MemberService {
 
 	public Member getMemberByLoginId(String loginId) {
 		Map<String, Object> memberMap = memberDao.getMemberByLoginId(loginId);
-
+		
 		if (memberMap.isEmpty()) {
 			return null;
 		}
 		return new Member(memberMap);
 	}
+
 }
